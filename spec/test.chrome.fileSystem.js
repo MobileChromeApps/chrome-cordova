@@ -4,6 +4,18 @@
 
 chromeSpec(function(runningInBackground) {
   describe('chrome.fileSystem', function() {
+    describe('getDisplayPath()', function() {
+      var testFileEntry = { 'name': 'testFile.png' };
+
+      it('returns the file entry\'s name', function() {
+        var onGotDisplayPath = function(displayPath) {
+          expect(displayPath).toEqual(testFileEntry.name);
+        };
+
+        chrome.fileSystem.getDisplayPath(testFileEntry, onGotDisplayPath);
+      });
+    });
+
     describe('chooseEntry()', function() {
       it('throws when args are invalid', function() {
         expect(function() { chrome.fileSystem.chooseEntry(); }).toThrow();

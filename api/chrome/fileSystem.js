@@ -6,6 +6,13 @@ define('chrome.fileSystem', function(require, module) {
   var argscheck = cordova.require('cordova/argscheck');
   var exports = module.exports;
 
+  exports.getDisplayPath = function(fileEntry, callback) {
+    // Call the given callback with the file entry's name.
+    if (!!callback && typeof callback == 'function') {
+      callback(fileEntry.name);
+    }
+  };
+
   exports.chooseEntry = function(options, callback) {
     // Check arguments.
     argscheck.checkArgs('of', 'chrome.fileSystem.chooseEntry', arguments);
