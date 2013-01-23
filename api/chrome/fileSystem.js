@@ -15,8 +15,7 @@ define('chrome.fileSystem', function(require, module) {
     };
 
     // Prepare the options for getting the picture.
-    var getPictureOptions = { quality: 50,
-                              destinationType: navigator.camera.DestinationType.NATIVE_URI,
+    var getPictureOptions = { destinationType: navigator.camera.DestinationType.NATIVE_URI,
                               sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY };
 
     // Get a picture.
