@@ -41,7 +41,6 @@ rm -rf "$DST_WWW_PATH"
 cp -RL "$SRC_WWW_PATH" "$DST_WWW_PATH"
 # Add in the cordova.js file (renaming it if applicable).
 cp "$SRC_JS_PATH" "$DST_WWW_PATH"/cordova.js
-cp "$SRC_JS_PATH" "$DST_WWW_PATH"/fileSystem/cordova.js
 # Add in the chrome files.
 cp "$CRCDV_PATH"/integration/chrome* "$DST_WWW_PATH"
 cp "$CRCDV_PATH"/grunt_output/api/chromeapi.js "$DST_WWW_PATH"
