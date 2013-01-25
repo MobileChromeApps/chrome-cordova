@@ -10,6 +10,14 @@ define('chrome.fileSystem', function(require, module) {
     callback(fileEntry.fullPath);
   };
 
+  exports.getWritableEntry = function(fileEntry, callback) {
+    callback(null);
+  };
+
+  exports.isWritableEntry = function(fileEntry, callback) {
+    callback(false);
+  };
+
   exports.chooseEntry = function(options, callback) {
     // Create the callback for getPicture.
     // It creates a file entry and passes it to the chooseEntry callback.
