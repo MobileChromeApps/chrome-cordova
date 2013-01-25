@@ -6,6 +6,10 @@ define('chrome.fileSystem', function(require, module) {
   var exports = module.exports;
   var FileEntry = cordova.require('cordova/plugin/FileEntry');
 
+  exports.getDisplayPath = function(fileEntry, callback) {
+    callback(fileEntry.fullPath);
+  };
+
   exports.chooseEntry = function(options, callback) {
     // Create the callback for getPicture.
     // It creates a file entry and passes it to the chooseEntry callback.
