@@ -9,6 +9,7 @@
 
   <name>Chrome Apps Core</name>
 
+  <!-- Javascript modules. Note that some module names differ from the chrome API locations -->
   <js-module src="app/runtime.js" name="app.runtime">
     <clobbers target="chrome.app.runtime" />
   </js-module>
@@ -27,6 +28,11 @@
   <js-module src="runtime.js" name="runtime">
     <clobbers target="chrome.runtime" />
   </js-module>
+
+  <!-- Integration files -->
+  <asset src="www/chromeapp.html" target="chromeapp.html" />
+  <asset src="www/chromebgpage.html" target="chromebgpage.html" />
+  <asset src="www/chromeappstyles.css" target="chromeappstyles.css" />
 
   <!-- Empty platforms; this is a JS-only plugin. -->
   <platform name="android"></platform>
