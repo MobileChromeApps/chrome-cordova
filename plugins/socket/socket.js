@@ -2,9 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-define('chrome.socket', function(require, module) {
-
-var exports = module.exports;
 var platform = cordova.require('cordova/platform').id;
 
 exports.create = function(socketMode, stuff, callback) {
@@ -204,4 +201,3 @@ exports.getNetworkList = function() {
   console.warn('chrome.socket.getNetworkList not implemented yet');
 };
 
-});
