@@ -51,48 +51,14 @@ module.exports = function(grunt) {
         '// http://github.com/MobileChromeApps/chrome-cordova\n' +
         '// Built on <%= grunt.template.today("yyyy-mm-dd") %>\n'
     },
-    lint: {
-      api: ['api/**/!(prefix|suffix).js'],
-      grunt: ['grunt.js'],
-      spec: ['spec/**/!(jasmine*).js']
-    },
-    concat: {
-      api: {
-        // This should ensure that the top-level API gets included first, before any other files or subdirectories.
-        src: ['<banner:meta.api_banner>', 'api/prefix.js', 'api/chrome/**/*.js', 'api/helpers/**/*.js', 'api/chrome.js', 'api/suffix.js'],
-        dest: 'grunt_output/api/chromeapi.js'
-      }
-    },
-    min: {
-      api: {
-        src: ['<banner:meta.api_banner>', '<config:concat.api.dest>'],
-        dest: 'grunt_output/api/chromeapi.min.js'
-      }
-    },
     watch: {
-      api: {
-        files: ['api/**/*.js'],
-        tasks: 'api copy:cordova_spec2'
-      },
       spec: {
-        files: ['spec/**/*', 'integration/*', 'third_party/**/*'],
+        files: ['spec/**/*', 'third_party/**/*'],
         tasks: 'spec'
       }
     },
     jshint: {
       // Options for all targets (http://www.jshint.com/docs/).
-      // Per-taget options.
-      api: {
-        options: mergeObjs(defaultJsHintOptions, {
-          browser: true, // document, window, navigator, etc.
-          forin: true // Apps may add things to Object.prototype.
-        }),
-        globals: {
-          cordova: false,
-          unsupportedApi: false, // TODO(agrieve): Remove.
-          define: false
-        }
-      },
       grunt: {
         options: mergeObjs(defaultJsHintOptions, {
           node: true
@@ -110,31 +76,7 @@ module.exports = function(grunt) {
     copy: {
       spec: {
         files: {
-          'grunt_output/spec/': 'spec/**' // Resolves symlinks.
-        }
-      },
-      cordova_spec1: {
-        files: {
-          'grunt_output/cordova_spec/': 'spec/**'
-        }
-      },
-      cordova_spec2: {
-        files: {
-          'grunt_output/cordova_spec/': [
-            'integration/chrome*',
-            'grunt_output/api/chromeapi.js'
-          ],
-          'grunt_output/cordova_spec/fileSystem/': [
-            'integration/chrome*',
-            'grunt_output/api/chromeapi.js'
-          ],
-          'grunt_output/cordova_spec/runtime/': [
-            'integration/chrome*',
-            'grunt_output/api/chromeapi.js'
-          ]
-        },
-        options: {
-          flatten: true
+          'grunt_output/': 'spec/**' // Resolves symlinks.
         }
       }
     }
@@ -144,12 +86,14 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.renameTask('watch', '_watch');
-  grunt.registerTask('api', 'lint:api concat');
-  grunt.registerTask('spec', 'api lint:spec copy');
-  grunt.registerTask('build', 'lint:grunt spec');
-  grunt.registerTask('watch', 'clean build _watch');
-  grunt.registerTask('default', 'clean build');
+  grunt.registerTask('spec', ['copy']);
+  grunt.registerTask('build', ['spec']);
+  grunt.registerTask('watch', ['clean', 'build', '_watch']);
+  grunt.registerTask('default', ['clean', 'build']);
 };
 
