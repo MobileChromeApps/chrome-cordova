@@ -2,12 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-define('helpers.stubs', function(require, module) {
-  var exports = module.exports;
-  exports.createStub = function(obj, propName, value) {
-    obj.__defineGetter__(propName, function() {
-      console.warn('Access made to stub: ' + obj.__namespace__ + '.' + propName);
-      return value;
-    });
-  };
-});
+exports.createStub = function(obj, propName, value) {
+  obj.__defineGetter__(propName, function() {
+    console.warn('Access made to stub: ' + obj.__namespace__ + '.' + propName);
+    return value;
+  });
+};
