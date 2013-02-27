@@ -49,4 +49,4 @@ Event.prototype.addRules = function() { };
 Event.prototype.getRules = function() { };
 Event.prototype.removeRules = function() { };
 
-exports = Event;
+module.exports = Event;

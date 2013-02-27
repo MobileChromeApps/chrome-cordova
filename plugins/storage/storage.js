@@ -20,7 +20,9 @@ function StorageArea(namespaceChar) {
   this._namespace = '_%_' + namespaceChar;
 }
 
-StorageArea.prototype.getBytesInUse = unsupportedApi('StorageArea.getBytesInUse');
+StorageArea.prototype.getBytesInUse = function() {
+  console.warn('chrome.storage.*.getBytesInUse is not supported on mobile.');
+};
 
 StorageArea.prototype.clear = function() {
   var toRemove = [];
@@ -117,7 +119,7 @@ exports.sync = sync;
 
 // TODO(mmocny): Hook up this event so it actually gets called(?)
 // TODO(braden): How do we want to handle this event when we're not in a Chrome app?
-var Event = require('chrome.Event');
+var Event = require('chrome.common.events');
 if (Event) {
   exports.onChanged = new Event('onChanged');
 }
