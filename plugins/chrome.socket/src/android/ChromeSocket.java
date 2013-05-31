@@ -351,7 +351,15 @@ public class ChromeSocket extends CordovaPlugin {
                 boolean success = udpInit();
                 if (!success) return false;
             }
-            udpSocket.bind(new InetSocketAddress(port)); // can throw
+
+            try {
+              udpSocket.bind(new InetSocketAddress(port));
+            } catch (SocketException se) {
+                Log.e(LOG_TAG, "Failed to bind UDP socket.", se);
+                // REVIEW(mmocny): context.error?
+                return false;
+            }
+
             this.bound = true;
             return true;
         }
