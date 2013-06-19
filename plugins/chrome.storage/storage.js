@@ -3,8 +3,8 @@
 // found in the LICENSE file.
 
 var exports = module.exports;
-var exec = cordova.require('cordova/exec');
-var socket = cordova.require('org.chromium.chrome.socket.socket');
+var exec = require('cordova/exec');
+var socket = require('org.chromium.chrome.socket.Socket');
 
 function StorageChange(oldValue, newValue) {
     this.oldValue = oldValue;
@@ -221,10 +221,11 @@ exports.shared._connectedSockets = [];
 
 exports.shared._addConnection = function(socketId) {
   exports.shared._connectedSockets.push(socketId);
-  socket.read(socketId, function(readResult) {
+  socket.read(socketId, function self(readResult) {
     var recv = new Uint8Array(readResult.data);
     var changes = JSON.parse(String.fromCharCode.apply(null, recv));
     exports.shared._remoteOnChanged(changes);
+    socket.read(socketId, self);
   });
 };
 exports.shared._removeConnection = function(socketId) {
@@ -233,7 +234,7 @@ exports.shared._removeConnection = function(socketId) {
 
 exports.shared.onChanged.addListener(function(changes) {
   if (exports.shared._nextChangeUpdateIsFromRemote) {
-    this._nextChangeUpdateIsFromRemote = false;
+    exports.shared._nextChangeUpdateIsFromRemote = false;
     return;
   }
   console.log('sending changes to remotes..');
