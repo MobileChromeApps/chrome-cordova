@@ -4,6 +4,7 @@
 
 var exports = module.exports;
 var exec = cordova.require('cordova/exec');
+var socket = cordova.require('org.chromium.chrome.socket.socket');
 
 function StorageChange(oldValue, newValue) {
     this.oldValue = oldValue;
@@ -196,5 +197,57 @@ sync.MAX_SUSTAINED_WRITE_OPERATIONS_PER_MINUTE = 10;
 sync.QUOTA_BYTES = 102400;
 exports.sync = sync;
 
-var internal = new StorageArea('internal', null);
-exports.internal = internal;
+exports.internal = new StorageArea('internal', null);
+
+var sharedOnChanged = new Event('onChanged');
+exports.shared = new StorageArea('shared', sharedOnChanged);
+exports.shared.onChanged = sharedOnChanged;
+
+exports.shared._nextChangeUpdateIsFromRemote = false;
+
+exports.shared._remoteOnChanged = function(changes) {
+  var toCall = exports.shared.remove;
+  Object.keys(changes).forEach(function(key) {
+    if (changes[key].hasOwnProperty('newValue')) {
+      toCall = exports.shared.set;
+    }
+    changes[key] = changes[key].newValue;
+  });
+  exports.shared._nextChangeUpdateIsFromRemote = true;
+  toCall.call(exports.shared, changes);
+};
+
+exports.shared._connectedSockets = [];
+
+exports.shared._addConnection = function(socketId) {
+  exports.shared._connectedSockets.push(socketId);
+  socket.read(socketId, function(readResult) {
+    var recv = new Uint8Array(readResult.data);
+    var changes = JSON.parse(String.fromCharCode.apply(null, recv));
+    exports.shared._remoteOnChanged(changes);
+  });
+};
+exports.shared._removeConnection = function(socketId) {
+  exports.shared._connectedSockets = exports.shared._connectedSockets.filter(function(id) { return id !== socketId; })
+}
+
+exports.shared.onChanged.addListener(function(changes) {
+  if (exports.shared._nextChangeUpdateIsFromRemote) {
+    this._nextChangeUpdateIsFromRemote = false;
+    return;
+  }
+  console.log('sending changes to remotes..');
+
+  var changesEncoded = (function(str) {
+      var ret = new Uint8Array(str.length);
+      for (var i = 0; i < str.length; i++) {
+          ret[i] = str.charCodeAt(i);
+      }
+      return ret.buffer;
+  }(JSON.stringify(changes)));
+
+  exports.shared._connectedSockets.forEach(function(socketId) {
+    socket.write(socketId, changesEncoded, function(writeResult) {});
+  });
+});
+
