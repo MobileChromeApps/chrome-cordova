@@ -206,23 +206,48 @@ exports.getNetworkList = function(callback) {
 };
 
 exports.joinGroup = function(socketId, address, callback) {
-    console.warn('chrome.socket.joinGroup not implemented yet');
+    if (platform.id !== 'android') {
+        console.warn('chrome.socket.joinGroup not implemented yet');
+        return;
+    }
+
+    exec(callback, null, 'ChromeSocket', 'joinGroup', [socketId, address]);
 }
 
 exports.leaveGroup = function(socketId, address, callback) {
-    console.warn('chrome.socket.leaveGroup not implemented yet');
+    if (platform.id !== 'android') {
+        console.warn('chrome.socket.leaveGroup not implemented yet');
+        return;
+    }
+
+    exec(callback, null, 'ChromeSocket', 'leaveGroup', [socketId, address]);
 }
 
 exports.setMulticastTimeToLive = function(socketId, ttl, callback) {
-    console.warn('chrome.socket.setMulticastTimeToLive not implemented yet');
+    if (platform.id !== 'android') {
+        console.warn('chrome.socket.setMulticastTimeToLive not implemented yet');
+        return;
+    }
+
+    exec(callback, null, 'ChromeSocket', 'setMulticastTimeToLive', [socketId, ttl]);
 }
 
 exports.setMulticastLoopbackMode = function(socketId, enabled, callback) {
-    console.warn('chrome.socket.setMulticastLoopbackMode not implemented yet');
+    if (platform.id !== 'android') {
+        console.warn('chrome.socket.setMulticastLoopbackMode not implemented yet');
+        return;
+    }
+
+    exec(callback, null, 'ChromeSocket', 'setMulticastLoopbackMode', [socketId, enabled]);
 }
 
 exports.getJoinedGroups = function(socketId, callback) {
-    console.warn('chrome.socket.getJoinedGroups not implemented yet');
+    if (platform.id !== 'android') {
+        console.warn('chrome.socket.getJoinedGroups not implemented yet');
+        return;
+    }
+
+    exec(callback, null, 'ChromeSocket', 'getJoinedGroups', [socketId]);
 }
 
 /* Converted From chromium/src/net/base/net_error_list.h
