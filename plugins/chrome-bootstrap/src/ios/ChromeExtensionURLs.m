@@ -19,6 +19,8 @@
 @interface ChromeAppCORSURLProtocol : NSURLProtocol {
     NSURLConnection *proxyConnection;
     NSString *originalOrigin;
+    NSString *CORSRequestHeaders;
+    NSString *CORSRequestMethod;
     BOOL isRequestAuthenticated;
 }
 @end
@@ -161,6 +163,8 @@ static void initialize_whitlist_dict() {
     originalOrigin = [[self request] valueForHTTPHeaderField:@"Origin"];
     isRequestAuthenticated = [[self request] valueForHTTPHeaderField:@"Authorization"] != nil;
     [newRequest setValue:nil forHTTPHeaderField:@"Origin"];
+    CORSRequestHeaders = [[self request] valueForHTTPHeaderField:@"Access-Control-Request-Headers"];
+    CORSRequestMethod = [[self request] valueForHTTPHeaderField:@"Access-Control-Request-Method"];
     proxyConnection = [[NSURLConnection alloc] initWithRequest:newRequest delegate:self];
 }
 
@@ -169,9 +173,15 @@ static void initialize_whitlist_dict() {
     if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
         NSHTTPURLResponse *hresponse = (NSHTTPURLResponse *)response;
         NSMutableDictionary *headers = [[hresponse allHeaderFields] mutableCopy];
-        if (isRequestAuthenticated || [headers valueForKey:@"WWW-Authenticate"] != nil) {
+        if (isRequestAuthenticated || [headers valueForKey:@"WWW-Authenticate"] != nil || CORSRequestHeaders != nil) {
           [headers setValue:originalOrigin forKey:@"Access-Control-Allow-Origin"];
           [headers setValue:@"true" forKey:@"Access-Control-Allow-Credentials"];
+          if (CORSRequestHeaders != nil) {
+            [headers setValue:CORSRequestHeaders forKey:@"Access-Control-Allow-Headers"];
+          }
+          if (CORSRequestMethod != nil) {
+            [headers setValue:CORSRequestMethod forKey:@"Access-Control-Allow-Methods"];
+          }
         } else {
           [headers setValue:@"*" forKey:@"Access-Control-Allow-Origin"];
         }
