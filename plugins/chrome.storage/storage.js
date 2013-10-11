@@ -5,11 +5,6 @@
 var exports = module.exports;
 var exec = cordova.require('cordova/exec');
 
-function StorageChange(oldValue, newValue) {
-    this.oldValue = oldValue;
-    this.newValue = newValue;
-}
-
 function _jsonReplacer(key) {
     // Don't use the value passed in since it has already gone through toJSON().
     var value = this[key];
@@ -35,7 +30,10 @@ function _calculateChanges(oldKeyVals, newKeyVals) {
     var ret = {};
     for(var key in newKeyVals) {
         if (newKeyVals.hasOwnProperty(key)) {
-            ret[key] = new StorageChange(oldKeyVals[key], newKeyVals[key]);
+            ret[key] = {
+              oldValue: oldKeyVals[key],
+              newValue: newKeyVals[key],
+            };
         }
     }
     return ret;
