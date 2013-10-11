@@ -19,6 +19,9 @@
     <clobbers target="chrome.storage" />
   </js-module>
 
+  <js-module src="test/tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/ChromeStorage.java" target-dir="src/org/chromium" />
 
