@@ -1,35 +1,65 @@
 # chrome.identity Plugin
 
-OAuth2 authentication for Android and iOS. On Android, it uses Google Play Services, and on iOS it uses InAppBrowser.
+This plugin provides OAuth2 authentication for Android and iOS.
 
-Status: Stable on Android, alpha on iOS
+On Android, this plugin uses Google Play Services; on iOS, it uses InAppBrowser.
 
-For how to use the API, refer to docs at: [http://developer.chrome.com/apps/app_identity.html](http://developer.chrome.com/apps/app_identity.html)
+## Status
 
-For iOS, you need to create a "web" entry in your [API Dashboard](https://code.google.com/apis/console/). Put this web `client_id` in your manifest (as shown below), and never the Android one (it is automatically extracted from your APK).
+Stable on Android; alpha on iOS.
 
-For Android, you need to create an "Android" Client ID in your [API Dashboard](https://code.google.com/apis/console/)
+## Reference
 
-To find your debug signing certificate (password=android):
+The API reference is [here](http://developer.chrome.com/apps/identity.html); a description of how to use the API is [here](http://developer.chrome.com/apps/app_identity.html).
+
+## Preparing Your Application
+
+### Android
+
+You will need to register your application in the [Google Cloud Console](https://cloud.google.com/console).  Create a project.
+
+On the left sidebar, navigate to "APIs & Auth" > "Registered Apps".  Click the red `Register App` button.
+
+Register your app as an "Android" app.  This requires a package name and a SHA1 fingerprint.  To obtain the fingerprint, enter the following the command in a console window:
 
     keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore -list -v
 
-On Windows, replace `~` with `%USERPROFILE%`
+(On Windows, replace `~` with `%USERPROFILE%`.)
 
-When using this plugin outside the context of a Mobile Chrome App (app created with mca.js), you must provide OAuth settings via `chrome.runtime.setManifest`. For Example:
+You will be prompted for a password, which is `android`.
+
+This process will yield a client id, but no action is required with it (unlike for iOS).
+
+### iOS
+
+For iOS, first follow the instructions [here](https://developers.google.com/+/mobile/ios/getting-started).
+
+**Note:** Skip step 2, part 7; you will instead put your client id in your manifest (as shown in the "Updating Your Manifest" section).
+
+Next, in Xcode, click on the project in the left sidebar and navigate to the `Build Phases` tab.  In the `Compile Sources` section, remove `OpenInChromeController.m`.
+
+## Updating Your Manifest
+
+Your manifest needs to be updated to include your client id and scopes.  In a Mobile Chrome App (ie. an app created using mca.js), this is done in manifest.json as follows:
+
+    "oauth2": {
+      "client_id": "YOUR_IOS_CLIENT_ID",
+      "scopes": [
+        "SCOPE_1",
+        "SCOPE_2",
+        "SCOPE_3"
+      ]
+    },
+
+When using this plugin outside the context of a Mobile Chrome App, this information must be provided using `chrome.runtime.setManifest`:
 
     chrome.runtime.setManifest({
       oauth2: {
-        client_id: 'YOUR_WEB_CLIENT_ID',
-        scopes: [ 'ARRAY', 'OF', 'SCOPES' ]
-      }
-    });
-    chrome.identity.getAuthToken({ interactive: true }, function(token) {
-      if (!token) {
-        console.log(JSON.stringify(chrome.runtime.lastError));
+        client_id: 'YOUR_IOS_CLIENT_ID',
+        scopes: [ 'SCOPE_1', 'SCOPE_2', 'SCOPE_3' ]
       }
     });
 
+## Playing With Google APIs
 
-## Playing with Google APIs
-For an API Playground, and to find which scopes are needed for various APIs, use the [APIs Exploror](https://developers.google.com/apis-explorer/). Also consider using the [Google API JavaScript Client](https://code.google.com/p/google-api-javascript-client/) for an easier time.
+The [Google APIs Explorer](https://developers.google.com/apis-explorer/) is a useful tool for determining required scopes and testing various API use cases.

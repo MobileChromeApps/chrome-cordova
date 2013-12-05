@@ -45,6 +45,7 @@ exports.getChannelId = function(interactive, callback) {
   exec(win, checkToIssueCallback, 'ChromePushMessaging', 'getRegistrationId', [ chrome.runtime.getManifest().senderId ]);
 }
 
+
 exports.onMessage = new Event('onMessage');
 
 function fireStartupMessages() {

@@ -15,7 +15,7 @@
 
   <dependency id="org.chromium.common" url="." subdir="plugins/chrome-common" />
   <dependency id="org.chromium.runtime" url="." subdir="plugins/chrome-runtime" />
-  <dependency id="org.apache.cordova.core.inappbrowser" url="." subdir="../cordova/cordova-plugin-inappbrowser" />
+  <dependency id="org.apache.cordova.inappbrowser" url="." subdir="../cordova/cordova-plugin-inappbrowser" />
   <dependency id="com.google.playservices" url="." subdir="../cordova/google-play-services" />
 
   <js-module src="identity.js" name="Identity">
@@ -38,8 +38,14 @@
   </platform>
 
   <platform name="ios">
-    <config-file target="config.xml" parent="/widget">
-      <access origin="https://accounts.google.com/*" />
-    </config-file>
+     <source-file src="src/ios/ChromeIdentity.m" />
+     <header-file src="src/ios/ChromeIdentity.h" />
+
+     <config-file target="config.xml" parent="/widget">
+       <feature name="ChromeIdentity">
+         <param name="ios-package" value="ChromeIdentity"/>
+       </feature>
+       <access origin="https://accounts.google.com/*" />
+     </config-file>
   </platform>
 </plugin>

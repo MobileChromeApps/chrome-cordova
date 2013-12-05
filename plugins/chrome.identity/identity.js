@@ -10,13 +10,12 @@ try {
 } catch(e) {}
 
 // TODO(maxw): Automatically handle expiration.
-// TODO(maxw): Can multiple tokens be cached?
 var cachedToken;
 
 exports.getAuthToken = function(details, callback) {
     if (typeof details === 'function' && typeof callback === 'undefined') {
         callback = details;
-        details = { interactive: false, useNativeAuth: true };
+        details = { interactive: false };
     }
     if (typeof callback !== 'function') {
         return callbackWithError('Callback function required');
@@ -27,11 +26,6 @@ exports.getAuthToken = function(details, callback) {
     var fail = function(msg) {
         callbackWithError(msg, callback);
     };
-
-    // Use native auth by default.
-    if (!details.useNativeAuth) {
-        details.useNativeAuth = 'true';
-    }
 
     // If we have a cached token, send it along.
     if (cachedToken) {
@@ -47,36 +41,21 @@ exports.getAuthToken = function(details, callback) {
         callback(token);
     };
 
-    if (platformId !== 'android' || details.useNativeAuth === 'false') {
-        // Use web app oauth flow
-        getAuthTokenJS(augmentedCallback, fail, details);
-    } else {
-        // If we are not using chrome.runtime, check for oauth2 args in the details map
-        var oauthDetails = details.oauth2 || runtime && runtime.getManifest().oauth2;
+    // If we are not using chrome.runtime, check for oauth2 args in the details map
+    var oauthDetails = details.oauth2 || runtime && runtime.getManifest().oauth2;
 
-        // Use native implementation for logging into google accounts
-        exec(augmentedCallback, fail, 'ChromeIdentity', 'getAuthToken', [!!details.interactive, oauthDetails]);
-    }
+    // Use native implementation for logging into google accounts
+    exec(augmentedCallback, fail, 'ChromeIdentity', 'getAuthToken', [!!details.interactive, oauthDetails]);
 };
 
 exports.removeCachedAuthToken = function(details, callback) {
-    // Use native auth by default.
-    if (!details.useNativeAuth) {
-        details.useNativeAuth = 'true';
-    }
-
-    // First, remove the cached token locally.
+    // Remove the cached token locally.
     if (details && details.token === cachedToken) {
         cachedToken = null;
     }
 
-    // If we're using native authentication, invalidate the token natively.  Otherwise, just call the callback.
-    if (platformId === 'android' && details.useNativeAuth === 'true') {
-        // Use native implementation for invalidating tokens
-        exec(callback, null, 'ChromeIdentity', 'removeCachedAuthToken', [details]);
-    } else {
-        callback();
-    }
+    // Invalidate the token natively.
+    exec(callback, null, 'ChromeIdentity', 'removeCachedAuthToken', [details.token]);
 }
 
 exports.launchWebAuthFlow = function(details, callback) {
@@ -89,34 +68,6 @@ exports.launchWebAuthFlow = function(details, callback) {
 
     launchInAppBrowser(details.url, details.interactive, callback);
 };
-
-function getAuthTokenJS(win, fail, details) {
-    // If we are not using chrome.runtime, check for oauth2 args in the details map
-    var manifestJson = (runtime) ? runtime.getManifest() : details;
-
-    if (typeof manifestJson === 'undefined')
-        return callbackWithError('manifest.json is not defined', fail);
-    if (typeof manifestJson.oauth2 === 'undefined')
-        return callbackWithError('oauth2 missing from manifest.json', fail);
-    if (typeof manifestJson.oauth2.client_id === 'undefined')
-        return callbackWithError('client_id missing from manifest.json', fail);
-    if (typeof manifestJson.oauth2.scopes === 'undefined')
-        return callbackWithError('scopes missing from manifest.json', fail);
-
-    var authURLBase = 'https://accounts.google.com/o/oauth2/auth?response_type=token';
-    var redirect_uri = 'http://www.google.com';
-    var client_id = manifestJson.oauth2.client_id;
-    var scope = manifestJson.oauth2.scopes;
-    var finalURL = authURLBase + '&redirect_uri=' + encodeURIComponent(redirect_uri) + '&client_id=' + encodeURIComponent(client_id) + '&scope=' + encodeURIComponent(scope.join(' '));
-
-    launchInAppBrowser(finalURL, details.interactive, function(newLoc) {
-        var token = getAllParametersFromUrl(newLoc, '#')['access_token'];
-        if (typeof token === 'undefined') {
-            return callbackWithError('The redirect uri did not have the access token', fail);
-        }
-        win(token);
-    });
-}
 
 function getAllParametersFromUrl(url, startString, endString) {
     if (typeof url !== 'undefined' && typeof startString !== 'undefined')
@@ -186,3 +137,4 @@ function launchInAppBrowser(authURL, interactive, callback) {
         callback();
     });
 }
+
