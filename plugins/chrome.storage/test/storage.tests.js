@@ -1,5 +1,6 @@
-exports.init = function() {
-  eval(require('org.apache.cordova.test-framework.test').injectJasmineInterface(this, 'this'));
+(function() {
+
+function init() {
 
   it('should contain definitions', function() {
     expect(chrome.storage).toBeDefined();
@@ -401,3 +402,12 @@ exports.init = function() {
     });
   });
 };
+
+if (typeof cordova !== 'undefined') {
+  eval(require('org.apache.cordova.test-framework.test').injectJasmineInterface(this, 'this'));
+  exports.init = init;
+} else {
+  tests.storage_init = init
+}
+
+}());

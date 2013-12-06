@@ -19,7 +19,7 @@
     <clobbers target="chrome.storage" />
   </js-module>
 
-  <js-module src="test/tests.js" name="tests">
+  <js-module src="test/storage.tests.js" name="tests">
   </js-module>
 
   <platform name="android">
