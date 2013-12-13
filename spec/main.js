@@ -69,7 +69,8 @@ function setUpJasmine() {
                            'expect',
                            'pending',
                            'addMatchers',
-                           'spyOn'];
+                           'spyOn',
+                           'addMatchers'];
   jasmine_functions.forEach(function(fn) {
     jasmineInterface[fn] = jasmineEnv[fn].bind(jasmineEnv);
   });
@@ -149,3 +150,5 @@ document.addEventListener("DOMContentLoaded", loaded);
 /******************************************************************************/
 
 }());
+
+/******************************************************************************/

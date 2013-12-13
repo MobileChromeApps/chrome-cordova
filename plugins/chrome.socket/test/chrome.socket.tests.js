@@ -101,7 +101,7 @@
 
     describe('TCP', function() {
       beforeEach(function() {
-        this.addMatchers({
+        addMatchers({
           toBeValidTcpReadResultEqualTo: function(data) {
             if (Object.prototype.toString.call(data).slice(8, -1) !== 'ArrayBuffer')
               throw new Error('toBeValidTcpReadResultEqualTo expects an ArrayBuffer');
@@ -124,7 +124,7 @@
         });
       });
 
-      beforeEachWaitsForDone(function(done) {
+      beforeEach(function(done) {
         createSockets('tcp', 2, done);
       });
 
@@ -246,7 +246,7 @@
 
     describe('UDP', function() {
       beforeEach(function() {
-        this.addMatchers({
+        addMatchers({
           toBeValidUdpReadResultEqualTo: function(data) {
             if (Object.prototype.toString.call(data).slice(8, -1) !== 'ArrayBuffer')
               throw new Error('toBeValidTcpReadResultEqualTo expects an ArrayBuffer');
@@ -271,7 +271,7 @@
         });
       });
 
-      beforeEachWaitsForDone(function(done) {
+      beforeEach(function(done) {
         createSockets('udp', 2, done);
       });
 
