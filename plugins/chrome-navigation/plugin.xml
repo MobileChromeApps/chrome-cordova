@@ -11,6 +11,9 @@
     <engine name="cordova" version=">=3.1.0-dev" />
   </engines>
 
+  <js-module src="test/chrome-navigation.tests.js" name="tests">
+  </js-module>
+
   <name>Chrome Apps Navigation</name>
 
   <platform name="android">

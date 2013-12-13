@@ -19,6 +19,9 @@
     <clobbers target="chrome.fileSystem" />
   </js-module>
 
+  <js-module src="test/chrome.fileSystem.tests.js" name="tests">
+  </js-module>
+
   <!-- Empty platforms; this is a JS-only plugin. -->
   <platform name="ios">
     <source-file src="src/ios/ChromeFileSystem.m" />

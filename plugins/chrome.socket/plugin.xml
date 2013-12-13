@@ -19,6 +19,9 @@
     <clobbers target="chrome.socket" />
   </js-module>
 
+  <js-module src="test/chrome.socket.tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/ChromeSocket.java" target-dir="src/org/chromium" />
 

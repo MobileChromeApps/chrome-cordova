@@ -28,6 +28,9 @@
     <clobbers target="chrome.mobile.impl" />
   </js-module>
 
+  <js-module src="test/chrome-bootstrap.tests.js" name="tests">
+  </js-module>
+
   <!-- Integration files -->
   <asset src="www/chromeapp.html" target="chromeapp.html" />
   <asset src="www/chromebgpage.html" target="chromebgpage.html" />

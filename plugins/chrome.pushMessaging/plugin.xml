@@ -19,6 +19,9 @@
     <clobbers target="chrome.pushMessaging" />
   </js-module>
 
+  <js-module src="test/chrome.pushMessaging.tests.js" name="tests">
+  </js-module>
+
   <name>Chrome Apps Push Messaging API</name>
 
   <platform name="android">

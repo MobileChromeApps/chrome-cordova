@@ -20,6 +20,9 @@
     <clobbers target="chrome.alarms" />
   </js-module>
 
+  <js-module src="test/chrome.alarms.tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/ChromeAlarms.java" target-dir="src/org/chromium" />
     <source-file src="src/android/AlarmReceiver.java" target-dir="src/org/chromium" />

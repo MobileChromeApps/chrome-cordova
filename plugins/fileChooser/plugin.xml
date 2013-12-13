@@ -16,6 +16,9 @@
   <js-module src="fileChooser.js" name="FileChooser">
   </js-module>
 
+  <js-module src="test/fileChooser.tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/FileChooser.java" target-dir="src/org/chromium" />
 

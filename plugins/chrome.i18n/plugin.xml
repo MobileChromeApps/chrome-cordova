@@ -19,6 +19,9 @@
     <clobbers target="chrome.i18n" />
   </js-module>
 
+  <js-module src="test/chrome.i18n.tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/ChromeI18n.java" target-dir="src/org/chromium" />
 

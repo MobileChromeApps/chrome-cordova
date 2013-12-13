@@ -22,6 +22,9 @@
     <clobbers target="chrome.syncFileSystem" />
   </js-module>
 
+  <js-module src="test/chrome.syncFileSystem.tests.js" name="tests">
+  </js-module>
+
   <platform name="ios">
     <config-file target="config.xml" parent="/widget">
       <access origin="https://www.googleapis.com/drive/*" />

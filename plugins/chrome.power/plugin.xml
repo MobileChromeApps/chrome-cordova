@@ -17,6 +17,9 @@
     <clobbers target="chrome.power" />
   </js-module>
 
+  <js-module src="test/chrome.power.tests.js" name="tests">
+  </js-module>
+
   <platform name="android">
     <source-file src="src/android/ChromePower.java" target-dir="src/org/chromium" />
 

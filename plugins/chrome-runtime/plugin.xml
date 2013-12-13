@@ -25,4 +25,8 @@
   <js-module src="api/runtime.js" name="runtime">
     <clobbers target="chrome.runtime" />
   </js-module>
+
+  <js-module src="test/chrome-runtime.tests.js" name="tests">
+  </js-module>
+
 </plugin>

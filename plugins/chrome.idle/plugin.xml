@@ -16,4 +16,8 @@
   <js-module src="idle.js" name="idle">
     <clobbers target="chrome.idle" />
   </js-module>
+
+  <js-module src="test/chrome.idle.tests.js" name="tests">
+  </js-module>
+
 </plugin>

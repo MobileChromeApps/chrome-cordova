@@ -20,6 +20,9 @@
   <js-module src="stubs.js" name="stubs" />
   <js-module src="helpers.js" name="helpers" />
 
+  <js-module src="test/chrome-common.tests.js" name="tests">
+  </js-module>
+
   <js-module src="lib/CryptoJS/sha256.js" name="CryptoJS-sha256" />
   <js-module src="lib/CryptoJS/enc-base64-min.js" name="CryptoJS-enc-base64-min" />
 </plugin>
