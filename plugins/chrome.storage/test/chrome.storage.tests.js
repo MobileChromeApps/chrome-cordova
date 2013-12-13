@@ -563,7 +563,7 @@
     eval(require('org.apache.cordova.test-framework.test').injectJasmineInterface(this, 'this'));
     exports.init = init;
   } else {
-    tests.storage_init = init
+    tests['chrome.storage'] = init;
   }
 
 }());

@@ -105,12 +105,17 @@ function createHtmlReporter(jasmine) {
 
 /******************************************************************************/
 
-function runAutoTests() {
-  setTitle('Auto Tests');
-
+function setUpTests() {
+  // TODO: instead of running them, list out buttons for each
   Object.keys(window.tests).forEach(function(key) {
     window.tests[key]();
   });
+}
+/******************************************************************************/
+
+
+function runAutoTests() {
+  setTitle('Auto Tests');
 
   // Run the tests!
   var jasmineEnv = jasmine.getEnv();
@@ -135,6 +140,7 @@ function runUnknownMode() {
 
 function loaded() {
   setUpJasmine();
+  setUpTests();
   createButton('Run Auto Tests', runAutoTests);
 }
 
